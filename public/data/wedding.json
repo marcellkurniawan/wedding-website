@@ -1,0 +1,69 @@
+{
+  "bride": {
+    "fullName": "Putri Cantika Sari",
+    "nickname": "Putri",
+    "parents": "Putri Pertama dari Bapak Abdul Rozak & Ibu Adelia Marni",
+    "bio": "Seorang desainer grafis yang mencintai seni dan kedamaian.",
+    "ig": "@putricantika",
+    "photo": "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80"
+  },
+  "groom": {
+    "fullName": "Andika Pratama",
+    "nickname": "Andika",
+    "parents": "Putra Pertama dari Bapak Deni Bastian & Ibu Aisha Dania",
+    "bio": "Software Engineer yang menemukan bug paling indah dalam hidupnya: Putri.",
+    "ig": "@andikapratama",
+    "photo": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80"
+  },
+  "event": {
+    "targetDate": "2027-12-28T08:00:00",
+    "akad": {
+      "time": "08:00 WIB - 10:00 WIB",
+      "venue": "Masjid Al-Akbar Surabaya",
+      "address": "Jl. Masjid Al Akbar Timur No.1, Surabaya",
+      "dresscode": "Putih / Pastel"
+    },
+    "resepsi": {
+      "time": "11:00 WIB - 14:00 WIB",
+      "venue": "Gedung Balai Pemuda",
+      "address": "Jl. Gubernur Suryo No.15, Surabaya",
+      "dresscode": "Navy Blue / Gold"
+    },
+    "gcalLink": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=The+Wedding+of+Putri+%26+Andika&dates=20271228T010000Z/20271228T070000Z&details=Kehadiran+Anda+adalah+kehormatan+bagi+kami.&location=Masjid+Al-Akbar+Surabaya"
+  },
+  "timeline": [
+    {
+      "year": "2022",
+      "title": "First Meet",
+      "desc": "Bertemu pertama kali di sebuah project kolaborasi agensi dan tech startup."
+    },
+    {
+      "year": "2025",
+      "title": "Engagement",
+      "desc": "Andika melamar Putri di sebuah restoran kecil di sudut kota Surabaya."
+    },
+    {
+      "year": "2027",
+      "title": "Our Wedding",
+      "desc": "Hari di mana kami mengikat janji suci untuk sehidup semati."
+    }
+  ],
+  "gallery": [
+    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=600&q=80"
+  ],
+  "gifts": [
+    {
+      "bank": "BCA",
+      "accountNumber": "1234567890",
+      "accountName": "Putri Cantika Sari"
+    },
+    {
+      "bank": "Mandiri",
+      "accountNumber": "0987654321",
+      "accountName": "Andika Pratama"
+    }
+  ]
+}

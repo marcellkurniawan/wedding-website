@@ -1,14 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wedding of Lorem Ipsum & Lorem Ipsum</title>
+    <title>The Wedding | Putri & Andika</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="public/assets/css/styles.css">
 </head>
 
 <body>
 
+    <nav id="navbar">
+        <ul>
+            <li><a href="#hero" class="active">Home</a></li>
+            <li><a href="#couple">Profile</a></li>
+            <li><a href="#event">Event</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#rsvp">RSVP</a></li>
+        </ul>
+    </nav>
+
+    <audio id="bg-music" loop>
+        <source src="public/assets/audio/bg-music.mp3" type="audio/mpeg">
+    </audio>
+    <button id="music-control" class="music-btn spinning">🎵</button>
+
+    <main class="scroll-container">
+
+        <section id="hero" class="snap-section hero-bg">
+            <div class="overlay flex-center flex-col text-center" data-aos="zoom-in" data-aos-duration="1500">
+                <p class="small-text">The Wedding Of</p>
+                <h1 class="names-title" id="hero-names">Putri & Andika</h1>
+                <p class="date-text">28 Desember 2027</p>
+
+                <div class="countdown" id="countdown">
+                    <div><span id="days">00</span>
+                        <p>Hari</p>
+                    </div>
+                    <div><span id="hours">00</span>
+                        <p>Jam</p>
+                    </div>
+                    <div><span id="minutes">00</span>
+                        <p>Menit</p>
+                    </div>
+                    <div><span id="seconds">00</span>
+                        <p>Detik</p>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">↓ Scroll Down ↓</div>
+        </section>
+
+        <section id="couple" class="snap-section content-section">
+            <div class="container" data-aos="fade-up">
+                <h2 class="section-title">Om Swastiastu</h2>
+                <div class="couple-container">
+                    <div class="person" data-aos="fade-right" data-aos-delay="200">
+                        <img id="bride-photo" class="photo-circle" src="" alt="Bride">
+                        <h3 id="bride-name" class="name"></h3>
+                        <p id="bride-parents" class="parents"></p>
+                        <p id="bride-bio" class="bio"></p>
+                    </div>
+                    <h1 class="ampersand" data-aos="zoom-in">&</h1>
+                    <div class="person" data-aos="fade-left" data-aos-delay="200">
+                        <img id="groom-photo" class="photo-circle" src="" alt="Groom">
+                        <h3 id="groom-name" class="name"></h3>
+                        <p id="groom-parents" class="parents"></p>
+                        <p id="groom-bio" class="bio"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="event" class="snap-section content-section blue-bg">
+            <div class="container" data-aos="fade-up">
+                <h2 class="section-title gold-text">Detail Acara</h2>
+                <div class="event-cards">
+                    <div class="card" data-aos="flip-left" data-aos-delay="100">
+                        <h3>Akad Nikah</h3>
+                        <p id="akad-time"></p>
+                        <p id="akad-venue" class="bold mt-2"></p>
+                        <p id="akad-address"></p>
+                        <p class="mt-2">Dresscode: <span id="akad-dresscode"></span></p>
+                    </div>
+                    <div class="card" data-aos="flip-right" data-aos-delay="200">
+                        <h3>Resepsi</h3>
+                        <p id="resepsi-time"></p>
+                        <p id="resepsi-venue" class="bold mt-2"></p>
+                        <p id="resepsi-address"></p>
+                        <p class="mt-2">Dresscode: <span id="resepsi-dresscode"></span></p>
+                    </div>
+                </div>
+                <div class="text-center mt-4" data-aos="zoom-in" data-aos-delay="300">
+                    <a id="btn-gcal" href="#" target="_blank" class="btn-gold">📅 Tambah ke Google Calendar</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="story" class="snap-section content-section">
+            <div class="container">
+                <h2 class="section-title" data-aos="fade-up">Our Story</h2>
+                <div class="timeline" id="timeline-container">
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="snap-section content-section blue-bg">
+            <div class="container">
+                <h2 class="section-title gold-text" data-aos="fade-up">Galeri Foto</h2>
+                <div class="masonry" id="gallery-container">
+                </div>
+            </div>
+        </section>
+
+        <section id="rsvp" class="snap-section content-section">
+            <div class="container split-layout">
+                <div class="rsvp-form-container" data-aos="fade-right">
+                    <h2 class="section-title text-left">RSVP & Ucapan</h2>
+                    <form id="rsvp-form">
+                        <input type="text" id="guest-name" placeholder="Nama Anda" required>
+                        <select id="guest-attendance" required>
+                            <option value="">Konfirmasi Kehadiran</option>
+                            <option value="Hadir">Hadir</option>
+                            <option value="Tidak Hadir">Tidak Hadir</option>
+                        </select>
+                        <input type="number" id="guest-pax" placeholder="Jumlah Tamu (Pax)" min="1" max="5">
+                        <textarea id="guest-message" rows="4" placeholder="Berikan doa & ucapan..." required></textarea>
+                        <button type="submit" class="btn-gold">Kirim RSVP</button>
+                    </form>
+                </div>
+                <div class="wishes-container" data-aos="fade-left">
+                    <div class="wishes-list" id="wishes-list">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="footer-section" class="snap-section content-section blue-bg text-center">
+            <div class="container">
+                <h2 class="section-title gold-text" data-aos="fade-down">Wedding Gift</h2>
+                <p data-aos="fade-up">Bagi keluarga dan sahabat yang ingin memberikan tanda kasih, dapat melalui
+                    rekening berikut:</p>
+                <div class="gift-cards" id="gift-container">
+                </div>
+
+                <h2 class="section-title gold-text mt-5" data-aos="fade-down">Lokasi Acara</h2>
+                <div class="map-container" data-aos="zoom-in">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.348651817478!2d112.71261331532822!3d-7.33967899470295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fb40b3793e5f%3A0x67a3a9cf3b1b4c4d!2sMasjid%20Nasional%20Al-Akbar%20Surabaya!5e0!3m2!1sid!2sid!4v1640000000000!5m2!1sid!2sid"
+                        width="100%" height="300" style="border:0; border-radius:10px;" allowfullscreen=""
+                        loading="lazy"></iframe>
+                </div>
+
+                <footer class="mt-5" data-aos="fade-up">
+                    <p>Merupakan suatu kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir.</p>
+                    <h3 class="names-title mt-2">Putri & Andika</h3>
+                    <p class="small-text">#AndikaJemputPutri</p>
+                </footer>
+            </div>
+        </section>
+    </main>
+
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="public/assets/js/app.js"></script>
 </body>
 
 </html>
