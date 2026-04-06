@@ -1,249 +1,408 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // 1. Initialize AOS
-  AOS.init({ once: false, mirror: true, offset: 50 });
+const state = {
+  data: null,
+  wishes: JSON.parse(localStorage.getItem("wishes") || "[]"),
+  musicPlaying: false,
+};
 
-  // 2. DOM Elements
-  const scrollContainer = document.querySelector(".scroll-container");
-  const sections = document.querySelectorAll(".snap-section");
-  const navLinks = document.querySelectorAll("nav ul li a");
-  const bgMusic = document.getElementById("bg-music");
-  const musicControl = document.getElementById("music-control");
-  let isPlaying = false;
-  let userInteracted = false;
+const $ = (id) => document.getElementById(id);
 
-  // 3. Handle Auto-Play Music on First Interaction
-  const startAudio = () => {
-    if (!userInteracted) {
+const loader = $("loader");
+const opening = $("opening");
+const mainContent = $("mainContent");
+const openInviteBtn = $("openInviteBtn");
+const bgMusic = $("bgMusic");
+const musicToggleBtn = $("musicToggleBtn");
+const menuToggle = $("menuToggle");
+const navLinks = $("navLinks");
+const toast = $("toast");
+const scrollProgress = $("scrollProgress");
+
+async function loadData() {
+  try {
+    const res = await fetch("data/wedding.json");
+    if (!res.ok) throw new Error("Gagal memuat JSON");
+    state.data = await res.json();
+
+    renderAll();
+    startCountdown();
+    renderWishes();
+    setupTilt();
+
+    // Inisialisasi event listener yang sudah dioptimasi
+    initOptimizedScroll();
+  } catch (e) {
+    console.error(e);
+    alert("Data undangan gagal dimuat. Cek file data/wedding.json");
+  } finally {
+    setTimeout(() => loader.classList.add("hidden"), 700);
+  }
+}
+
+function renderAll() {
+  const d = state.data;
+  $("openingNames").textContent =
+    `${d.couple.groom.nickname} & ${d.couple.bride.nickname}`;
+  $("openingDate").textContent = d.event.akad.dateText;
+  $("heroNames").textContent =
+    `${d.couple.groom.nickname} & ${d.couple.bride.nickname}`;
+  $("heroDate").textContent = d.event.akad.dateText;
+
+  $("groomPhoto").src = d.couple.groom.photo;
+  $("groomName").textContent = d.couple.groom.name;
+  $("groomParents").textContent = d.couple.groom.parents;
+  $("groomInstagram").href = d.couple.groom.instagram;
+
+  $("bridePhoto").src = d.couple.bride.photo;
+  $("brideName").textContent = d.couple.bride.name;
+  $("brideParents").textContent = d.couple.bride.parents;
+  $("brideInstagram").href = d.couple.bride.instagram;
+
+  $("akadTitle").textContent = d.event.akad.title;
+  $("akadDate").textContent = d.event.akad.dateText;
+  $("akadTime").textContent = d.event.akad.time;
+  $("akadLocation").textContent = d.event.akad.location;
+
+  $("receptionTitle").textContent = d.event.reception.title;
+  $("receptionDate").textContent = d.event.reception.dateText;
+  $("receptionTime").textContent = d.event.reception.time;
+  $("receptionLocation").textContent = d.event.reception.location;
+
+  $("mapsLink").href = d.event.mapsUrl;
+  $("calendarLink").href = buildGoogleCalendarUrl(d);
+
+  $("timeline").innerHTML = d.story
+    .map(
+      (item) => `
+    <article class="timeline-item reveal">
+      <h4>${item.year} - ${item.title}</h4>
+      <p>${item.desc}</p>
+    </article>
+  `,
+    )
+    .join("");
+
+  $("galleryGrid").innerHTML = d.gallery
+    .map(
+      (src) => `
+    <div class="gallery-item reveal"><img src="${src}" alt="Gallery photo" loading="lazy"/></div>
+  `,
+    )
+    .join("");
+
+  $("bankName").textContent = `Bank: ${d.gift.bankName}`;
+  $("accountNumber").textContent = d.gift.accountNumber;
+  $("accountName").textContent = `a.n. ${d.gift.accountName}`;
+  $("ewalletNumber").textContent = d.gift.ewallet;
+  $("footerText").textContent =
+    d.footerText || "Terima kasih atas doa dan kehadiran Anda.";
+}
+
+function startCountdown() {
+  const target = new Date(state.data.event.date).getTime();
+  const timer = setInterval(() => {
+    const now = Date.now();
+    const diff = target - now;
+    if (diff <= 0) {
+      clearInterval(timer);
+      ["cdDays", "cdHours", "cdMinutes", "cdSeconds"].forEach(
+        (id) => ($(id).textContent = "0"),
+      );
+      return;
+    }
+    $("cdDays").textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
+    $("cdHours").textContent = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    $("cdMinutes").textContent = Math.floor((diff / (1000 * 60)) % 60);
+    $("cdSeconds").textContent = Math.floor((diff / 1000) % 60);
+  }, 1000);
+}
+
+function buildGoogleCalendarUrl(d) {
+  const title = encodeURIComponent(
+    `Pernikahan ${d.couple.groom.nickname} & ${d.couple.bride.nickname}`,
+  );
+  const details = encodeURIComponent(
+    `Undangan Pernikahan\nLokasi: ${d.event.akad.location}`,
+  );
+  const location = encodeURIComponent(d.event.akad.location);
+  const start = formatDateCal(new Date(d.event.date));
+  const end = formatDateCal(
+    new Date(new Date(d.event.date).getTime() + 2 * 60 * 60 * 1000),
+  );
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+}
+
+function formatDateCal(date) {
+  const yyyy = date.getUTCFullYear();
+  const mm = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(date.getUTCDate()).padStart(2, "0");
+  const hh = String(date.getUTCHours()).padStart(2, "0");
+  const mi = String(date.getUTCMinutes()).padStart(2, "0");
+  const ss = String(date.getUTCSeconds()).padStart(2, "0");
+  return `${yyyy}${mm}${dd}T${hh}${mi}${ss}Z`;
+}
+
+function setupInteractions() {
+  openInviteBtn.addEventListener("click", () => {
+    opening.classList.add("hidden");
+    mainContent.classList.remove("hidden");
+    document.body.style.overflow = "auto";
+
+    // Trigger scroll ke atas secara instan agar tidak loncat
+    window.scrollTo({ top: 0, behavior: "instant" });
+
+    // PERBAIKAN: Jalankan observer SETELAH elemen visible
+    setTimeout(() => {
+      revealOnScroll();
+    }, 50);
+
+    launchConfetti();
+
+    if (!state.musicPlaying) {
       bgMusic
         .play()
         .then(() => {
-          isPlaying = true;
-          musicControl.classList.add("spinning");
-          musicControl.textContent = "🎵";
-          userInteracted = true;
+          state.musicPlaying = true;
+          musicToggleBtn.textContent = "🎵 Musik: On";
         })
-        .catch((e) => console.log("Audio autoplay blocked by browser"));
+        .catch(() => {});
     }
-  };
+  });
 
-  // Trigger audio on scroll or click anywhere in the container
-  scrollContainer.addEventListener("scroll", startAudio, { once: true });
-  document.body.addEventListener("click", startAudio, { once: true });
-
-  musicControl.addEventListener("click", (e) => {
-    e.stopPropagation(); // prevent triggering body click
-    if (isPlaying) {
+  musicToggleBtn.addEventListener("click", () => {
+    if (state.musicPlaying) {
       bgMusic.pause();
-      musicControl.classList.remove("spinning");
-      musicControl.textContent = "🔇";
+      state.musicPlaying = false;
+      musicToggleBtn.textContent = "🎵 Musik: Off";
     } else {
-      bgMusic.play();
-      musicControl.classList.add("spinning");
-      musicControl.textContent = "🎵";
+      bgMusic
+        .play()
+        .then(() => {
+          state.musicPlaying = true;
+          musicToggleBtn.textContent = "🎵 Musik: On";
+        })
+        .catch(() => {});
     }
-    isPlaying = !isPlaying;
   });
 
-  // 4. ScrollSpy (Active Navbar on Scroll)
-  const observerOptions = {
-    root: scrollContainer,
-    rootMargin: "0px",
-    threshold: 0.5, // trigger when 50% of section is visible
-  };
+  menuToggle?.addEventListener("click", () =>
+    navLinks.classList.toggle("show"),
+  );
 
-  const navObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const id = entry.target.getAttribute("id");
-        navLinks.forEach((link) => {
-          link.classList.remove("active");
-          if (link.getAttribute("href") === `#${id}`) {
-            link.classList.add("active");
-          }
-        });
-      }
-    });
-  }, observerOptions);
-
-  sections.forEach((sec) => navObserver.observe(sec));
-
-  // 5. Fetch JSON Data
-  fetch("data/wedding.json")
-    .then((res) => res.json())
-    .then((data) => {
-      populateData(data);
-      startCountdown(data.event.targetDate);
-      renderTimeline(data.timeline);
-      renderGallery(data.gallery);
-      renderGifts(data.gifts);
-      // Refresh AOS after DOM injected
-      setTimeout(() => AOS.refresh(), 500);
-    });
-
-  function populateData(data) {
-    // Couple
-    document.getElementById("bride-photo").src = data.bride.photo;
-    document.getElementById("bride-name").textContent = data.bride.fullName;
-    document.getElementById("bride-parents").textContent = data.bride.parents;
-    document.getElementById("bride-bio").textContent = data.bride.bio;
-
-    document.getElementById("groom-photo").src = data.groom.photo;
-    document.getElementById("groom-name").textContent = data.groom.fullName;
-    document.getElementById("groom-parents").textContent = data.groom.parents;
-    document.getElementById("groom-bio").textContent = data.groom.bio;
-
-    // Events
-    document.getElementById("akad-time").textContent = data.event.akad.time;
-    document.getElementById("akad-venue").textContent = data.event.akad.venue;
-    document.getElementById("akad-address").textContent =
-      data.event.akad.address;
-    document.getElementById("akad-dresscode").textContent =
-      data.event.akad.dresscode;
-
-    document.getElementById("resepsi-time").textContent =
-      data.event.resepsi.time;
-    document.getElementById("resepsi-venue").textContent =
-      data.event.resepsi.venue;
-    document.getElementById("resepsi-address").textContent =
-      data.event.resepsi.address;
-    document.getElementById("resepsi-dresscode").textContent =
-      data.event.resepsi.dresscode;
-
-    document.getElementById("btn-gcal").href = data.event.gcalLink;
-  }
-
-  function renderTimeline(timeline) {
-    const container = document.getElementById("timeline-container");
-    timeline.forEach((item, index) => {
-      const sideClass = index % 2 === 0 ? "timeline-left" : "timeline-right";
-      const html = `
-                <div class="timeline-item ${sideClass}" data-aos="fade-up">
-                    <div class="timeline-content">
-                        <h3>${item.year} - ${item.title}</h3>
-                        <p>${item.desc}</p>
-                    </div>
-                </div>`;
-      container.innerHTML += html;
-    });
-  }
-
-  function renderGallery(images) {
-    const container = document.getElementById("gallery-container");
-    images.forEach((src, index) => {
-      const img = document.createElement("img");
-      img.src = src;
-      img.setAttribute("data-aos", "zoom-in");
-      img.setAttribute("data-aos-delay", (index * 100).toString());
-      img.onclick = () => openLightbox(src);
-      container.appendChild(img);
-    });
-  }
-
-  function renderGifts(gifts) {
-    const container = document.getElementById("gift-container");
-    gifts.forEach((gift, index) => {
-      const html = `
-                <div class="gift-card" data-aos="flip-up" data-aos-delay="${index * 100}">
-                    <h3>${gift.bank}</h3>
-                    <p class="mt-2 bold" id="acc-${index}">${gift.accountNumber}</p>
-                    <p>a.n ${gift.accountName}</p>
-                    <button class="btn-gold mt-2" onclick="copyText('acc-${index}')">Salin Nomor</button>
-                </div>`;
-      container.innerHTML += html;
-    });
-  }
-
-  // 6. Countdown Logic
-  function startCountdown(target) {
-    const countDownDate = new Date(target).getTime();
-    setInterval(() => {
-      const now = new Date().getTime();
-      const distance = countDownDate - now;
-      if (distance < 0) return;
-      document.getElementById("days").innerHTML = String(
-        Math.floor(distance / (1000 * 60 * 60 * 24)),
-      ).padStart(2, "0");
-      document.getElementById("hours").innerHTML = String(
-        Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-      ).padStart(2, "0");
-      document.getElementById("minutes").innerHTML = String(
-        Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-      ).padStart(2, "0");
-      document.getElementById("seconds").innerHTML = String(
-        Math.floor((distance % (1000 * 60)) / 1000),
-      ).padStart(2, "0");
-    }, 1000);
-  }
-
-  // 7. Lightbox Logic
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightbox-img");
-  const closeBtn = document.querySelector(".lightbox-close");
-
-  function openLightbox(src) {
-    lightbox.style.display = "flex";
-    lightboxImg.src = src;
-  }
-
-  closeBtn.onclick = () => (lightbox.style.display = "none");
-  lightbox.onclick = (e) => {
-    if (e.target === lightbox) lightbox.style.display = "none";
-  };
-
-  // 8. Copy to Clipboard API
-  window.copyText = function (elementId) {
-    const text = document.getElementById(elementId).innerText;
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        alert("Nomor rekening berhasil disalin!");
-      })
-      .catch((err) => {
-        console.error("Gagal menyalin teks: ", err);
-      });
-  };
-
-  // 9. RSVP & LocalStorage Logic
-  const rsvpForm = document.getElementById("rsvp-form");
-  const wishesList = document.getElementById("wishes-list");
-
-  // Load existing wishes
-  let wishes = JSON.parse(localStorage.getItem("wedding_wishes")) || [
-    {
-      name: "John Doe",
-      attendance: "Hadir",
-      message: "Selamat menempuh hidup baru!",
-    }, // dummy starter
-  ];
-
-  function renderWishes() {
-    wishesList.innerHTML = "";
-    // reverse array so newest is on top
-    [...wishes].reverse().forEach((wish) => {
-      wishesList.innerHTML += `
-                <div class="wish-item">
-                    <h4>${wish.name} <span style="font-size:0.8em; color:#666;">(${wish.attendance})</span></h4>
-                    <p>"${wish.message}"</p>
-                </div>
-            `;
-    });
-  }
-
-  renderWishes(); // Init render
-
-  rsvpForm.addEventListener("submit", (e) => {
+  $("rsvpForm").addEventListener("submit", (e) => {
     e.preventDefault();
-    const newWish = {
-      name: document.getElementById("guest-name").value,
-      attendance: document.getElementById("guest-attendance").value,
-      message: document.getElementById("guest-message").value,
+    const wish = {
+      name: $("rsvpName").value.trim(),
+      attend: $("rsvpAttend").value,
+      guests: $("rsvpGuests").value || "1",
+      message: $("rsvpMessage").value.trim(),
+      time: new Date().toLocaleString("id-ID"),
     };
-
-    wishes.push(newWish);
-    localStorage.setItem("wedding_wishes", JSON.stringify(wishes));
-
+    if (!wish.name || !wish.attend || !wish.message) return;
+    state.wishes.unshift(wish);
+    localStorage.setItem("wishes", JSON.stringify(state.wishes));
     renderWishes();
-    rsvpForm.reset();
-    alert("Terima kasih atas RSVP dan ucapan Anda!");
+    e.target.reset();
+    showToast("Ucapan berhasil dikirim 💛");
   });
-});
+
+  $("copyAccountBtn").addEventListener("click", () =>
+    copyText($("accountNumber").textContent, "No. rekening tersalin"),
+  );
+  $("copyEwalletBtn").addEventListener("click", () =>
+    copyText($("ewalletNumber").textContent, "No. e-wallet tersalin"),
+  );
+
+  $("shareBtn").addEventListener("click", shareWhatsapp);
+
+  setupLightbox();
+}
+
+// PERBAIKAN: Satukan semua event scroll menggunakan requestAnimationFrame (Biar gak lag/patah2)
+function initOptimizedScroll() {
+  let isScrolling = false;
+  const sections = [...document.querySelectorAll("main section[id]")];
+  const links = [...document.querySelectorAll(".nav-links a")];
+  const heroParallax = $("heroParallax");
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!isScrolling) {
+        window.requestAnimationFrame(() => {
+          // 1. Progress Bar
+          const h = document.documentElement;
+          const scrolled =
+            (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+          scrollProgress.style.width = `${scrolled}%`;
+
+          // 2. Parallax
+          if (heroParallax) {
+            const y = window.scrollY * 0.08;
+            heroParallax.style.transform = `translateY(${Math.min(y, 24)}px)`;
+          }
+
+          // 3. Active Nav
+          const scrollY = window.scrollY + 120;
+          let current = "hero";
+          for (const sec of sections) {
+            if (scrollY >= sec.offsetTop) current = sec.id;
+          }
+          links.forEach((a) =>
+            a.classList.toggle(
+              "active",
+              a.getAttribute("href") === `#${current}`,
+            ),
+          );
+
+          isScrolling = false;
+        });
+        isScrolling = true;
+      }
+    },
+    { passive: true },
+  ); // passive true memperlancar scroll di HP
+}
+
+function renderWishes() {
+  const wishList = $("wishList");
+  if (!state.wishes.length) {
+    wishList.innerHTML = `<p class="center small">Belum ada ucapan. Jadilah yang pertama ❤️</p>`;
+    return;
+  }
+  wishList.innerHTML = state.wishes
+    .map(
+      (w) => `
+    <article class="wish-item">
+      <strong>${escapeHtml(w.name)}</strong> • <small>${escapeHtml(w.attend)} (${escapeHtml(w.guests)} tamu)</small>
+      <p>${escapeHtml(w.message)}</p>
+      <small>${escapeHtml(w.time)}</small>
+    </article>
+  `,
+    )
+    .join("");
+}
+
+function revealOnScroll() {
+  const els = document.querySelectorAll(".reveal");
+  // Perbesar sedikit area threshold biar muncul duluan saat di scroll
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+          obs.unobserve(entry.target); // Lepas observer setelah muncul agar memory enteng
+        }
+      });
+    },
+    { threshold: 0.1 },
+  );
+
+  els.forEach((el) => obs.observe(el));
+}
+
+function setupLightbox() {
+  const lightbox = $("lightbox");
+  const lightboxImg = $("lightboxImg");
+  $("closeLightbox").addEventListener("click", () =>
+    lightbox.classList.add("hidden"),
+  );
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) lightbox.classList.add("hidden");
+  });
+
+  document.addEventListener("click", (e) => {
+    const img = e.target.closest(".gallery-item img");
+    if (!img) return;
+    lightboxImg.src = img.src;
+    lightbox.classList.remove("hidden");
+  });
+}
+
+function setupTilt() {
+  const cards = document.querySelectorAll(".tilt");
+  cards.forEach((card) => {
+    card.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const rx = (y / rect.height - 0.5) * -6;
+      const ry = (x / rect.width - 0.5) * 6;
+      card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+    });
+    card.addEventListener("mouseleave", () => {
+      card.style.transform = "rotateX(0) rotateY(0)";
+    });
+  });
+}
+
+function launchConfetti() {
+  const canvas = $("confettiCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+
+  const pieces = Array.from({ length: 80 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * -canvas.height,
+    w: 6 + Math.random() * 6,
+    h: 8 + Math.random() * 10,
+    speed: 1 + Math.random() * 3,
+    color: Math.random() > 0.5 ? "#c9a227" : "#6fa1ff",
+  }));
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach((p) => {
+      p.y += p.speed;
+      if (p.y > canvas.height + 20) p.y = -20;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x, p.y, p.w, p.h);
+    });
+    frame++;
+    if (frame < 150) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
+}
+
+function shareWhatsapp() {
+  const d = state.data;
+  const guest = $("guestName").textContent || "Bapak/Ibu/Saudara/i";
+  const text = `Assalamu'alaikum ${guest}%0A%0AAnda diundang ke pernikahan ${d.couple.groom.nickname} & ${d.couple.bride.nickname}.%0A${location.href}`;
+  window.open(`https://wa.me/?text=${text}`, "_blank");
+}
+
+async function copyText(text, msg) {
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast(msg);
+  } catch {
+    showToast("Gagal menyalin");
+  }
+}
+
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 1800);
+}
+
+function setGuestFromQuery() {
+  const guest = new URLSearchParams(window.location.search).get("to");
+  if (guest) $("guestName").textContent = guest;
+}
+
+function escapeHtml(str = "") {
+  return str
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+document.body.style.overflow = "hidden";
+setGuestFromQuery();
+setupInteractions();
+loadData();
