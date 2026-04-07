@@ -1,0 +1,32 @@
+{
+  "couple": {
+    "groom": {
+      "name": "Romeo Montague",
+      "father": "Bapak Fulan",
+      "mother": "Ibu Fulanah",
+      "instagram": "@romeo"
+    },
+    "bride": {
+      "name": "Juliet Capulet",
+      "father": "Bapak Fulan",
+      "mother": "Ibu Fulanah",
+      "instagram": "@juliet"
+    }
+  },
+  "event": {
+    "akad": {
+      "date": "2026-12-12T08:00:00",
+      "time_string": "08.00 - 10.00 WIB",
+      "location": "Masjid Raya Bintaro",
+      "address": "Jl. Bintaro Utama, Tangerang Selatan",
+      "map_link": "https://maps.google.com/..."
+    },
+    "reception": {
+      "date": "2026-12-12T11:00:00",
+      "time_string": "11.00 - 14.00 WIB",
+      "location": "Hotel Mulia Senayan",
+      "address": "Jl. Asia Afrika, Jakarta Pusat",
+      "map_link": "https://maps.google.com/..."
+    }
+  }
+}

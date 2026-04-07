@@ -1,177 +1,390 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Wedding | Putri & Andika</title>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <title>The Wedding of Romeo & Juliet</title>
+
+    <!-- Fonts: Playfair Display (Serif), Lato (Sans), Great Vibes (Script) -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lato:wght@300;400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="public/assets/css/styles.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#0B192C',
+                        royalblue: '#1A365D',
+                        gold: '#D4AF37',
+                        lightgold: '#FDF8E7'
+                    },
+                    fontFamily: {
+                        sans: ['Lato', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        script: ['Great Vibes', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0B192C;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 4px;
+        }
+
+        .glass-panel {
+            background: rgba(11, 25, 44, 0.7);
+            backdrop-filter: blur(10px);
+        }
+    </style>
 </head>
 
-<body>
+<body class="bg-navy text-lightgold font-sans overflow-hidden">
 
-    <nav id="navbar">
-        <ul>
-            <li><a href="#hero" class="active">Home</a></li>
-            <li><a href="#couple">Profile</a></li>
-            <li><a href="#event">Event</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#rsvp">RSVP</a></li>
-        </ul>
-    </nav>
+    <!-- 1. Opening Screen (Lock Screen) -->
+    <section id="opening-screen"
+        class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-navy transition-transform duration-1000 border-8 border-gold/20">
+        <!-- SVG Floral Gold (Top Left) -->
+        <div class="floral-corner absolute top-4 left-4 w-24 md:w-32 text-gold opacity-80">
+            <svg viewBox="0 0 100 100" fill="currentColor">
+                <path d="M0,0 C40,0 70,30 70,70 C70,40 100,20 100,0 Z M0,20 C30,20 50,40 50,70 C50,40 80,10 100,10 Z" />
+            </svg>
+        </div>
 
-    <audio id="bg-music" loop>
-        <source src="public/assets/audio/bg-music.mp3" type="audio/mpeg">
-    </audio>
-    <button id="music-control" class="music-btn spinning">🎵</button>
+        <!-- SVG Floral Gold (Bottom Right) -->
+        <div class="floral-corner absolute bottom-4 right-4 w-24 md:w-32 text-gold opacity-80 rotate-180">
+            <svg viewBox="0 0 100 100" fill="currentColor">
+                <path d="M0,0 C40,0 70,30 70,70 C70,40 100,20 100,0 Z M0,20 C30,20 50,40 50,70 C50,40 80,10 100,10 Z" />
+            </svg>
+        </div>
 
-    <main class="scroll-container">
+        <div class="text-center z-10" data-aos="fade-up" data-aos-duration="1500">
+            <p class="font-sans text-sm tracking-[0.3em] uppercase text-gold mb-4">The Wedding Of</p>
+            <h1 class="font-script text-6xl md:text-8xl text-gold mb-6 drop-shadow-lg">Romeo & Juliet</h1>
+            <p class="mb-2 text-gray-300">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+            <h2 id="guest-name" class="text-2xl font-serif font-bold mb-8 text-white">Tamu Undangan</h2>
+            <button id="btn-open"
+                class="bg-gold text-navy font-bold px-8 py-3 rounded-full hover:bg-yellow-500 transition-all shadow-[0_0_15px_rgba(212,175,55,0.5)] flex items-center gap-2 mx-auto">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76">
+                    </path>
+                </svg>
+                Buka Undangan
+            </button>
+        </div>
+    </section>
 
-        <section id="hero" class="snap-section hero-bg">
-            <div class="overlay flex-center flex-col text-center" data-aos="zoom-in" data-aos-duration="1500">
-                <p class="small-text">The Wedding Of</p>
-                <h1 class="names-title" id="hero-names">Putri & Andika</h1>
-                <p class="date-text">28 Desember 2027</p>
+    <!-- Container Utama -->
+    <main id="main-content" class="w-full relative">
+        <!-- tsParticles Container (Golden Dust / Petals) -->
+        <div id="tsparticles" class="fixed inset-0 pointer-events-none z-0"></div>
 
-                <div class="countdown" id="countdown">
-                    <div><span id="days">00</span>
-                        <p>Hari</p>
-                    </div>
-                    <div><span id="hours">00</span>
-                        <p>Jam</p>
-                    </div>
-                    <div><span id="minutes">00</span>
-                        <p>Menit</p>
-                    </div>
-                    <div><span id="seconds">00</span>
-                        <p>Detik</p>
-                    </div>
-                </div>
+        <!-- 2. Hero Section -->
+        <section id="hero"
+            class="relative min-h-screen flex items-center justify-center text-center px-4 overflow-hidden pt-20">
+            <div class="absolute inset-0 z-0">
+                <!-- Online Image Background (Unsplash) -->
+                <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=2069"
+                    class="w-full h-full object-cover opacity-30" alt="Background">
+                <div class="absolute inset-0 bg-gradient-to-b from-navy/50 to-navy"></div>
             </div>
-            <div class="scroll-indicator">↓ Scroll Down ↓</div>
-        </section>
 
-        <section id="couple" class="snap-section content-section">
-            <div class="container" data-aos="fade-up">
-                <h2 class="section-title">Om Swastiastu</h2>
-                <div class="couple-container">
-                    <div class="person" data-aos="fade-right" data-aos-delay="200">
-                        <img id="bride-photo" class="photo-circle" src="" alt="Bride">
-                        <h3 id="bride-name" class="name"></h3>
-                        <p id="bride-parents" class="parents"></p>
-                        <p id="bride-bio" class="bio"></p>
-                    </div>
-                    <h1 class="ampersand" data-aos="zoom-in">&</h1>
-                    <div class="person" data-aos="fade-left" data-aos-delay="200">
-                        <img id="groom-photo" class="photo-circle" src="" alt="Groom">
-                        <h3 id="groom-name" class="name"></h3>
-                        <p id="groom-parents" class="parents"></p>
-                        <p id="groom-bio" class="bio"></p>
-                    </div>
-                </div>
+            <div class="z-10 relative glass-panel p-10 rounded-3xl border border-gold/30">
+                <p class="text-gold tracking-widest uppercase text-sm mb-4 bloom-text">We Are Getting Married</p>
+                <h1 class="font-script text-7xl md:text-9xl text-gold mb-4 bloom-text drop-shadow-md">Romeo & Juliet
+                </h1>
+                <p class="font-serif text-xl italic mb-8 bloom-text text-white">Minggu, 12 Desember 2026</p>
             </div>
         </section>
 
-        <section id="event" class="snap-section content-section blue-bg">
-            <div class="container" data-aos="fade-up">
-                <h2 class="section-title gold-text">Detail Acara</h2>
-                <div class="event-cards">
-                    <div class="card" data-aos="flip-left" data-aos-delay="100">
-                        <h3>Akad Nikah</h3>
-                        <p id="akad-time"></p>
-                        <p id="akad-venue" class="bold mt-2"></p>
-                        <p id="akad-address"></p>
-                        <p class="mt-2">Dresscode: <span id="akad-dresscode"></span></p>
-                    </div>
-                    <div class="card" data-aos="flip-right" data-aos-delay="200">
-                        <h3>Resepsi</h3>
-                        <p id="resepsi-time"></p>
-                        <p id="resepsi-venue" class="bold mt-2"></p>
-                        <p id="resepsi-address"></p>
-                        <p class="mt-2">Dresscode: <span id="resepsi-dresscode"></span></p>
-                    </div>
-                </div>
-                <div class="text-center mt-4" data-aos="zoom-in" data-aos-delay="300">
-                    <a id="btn-gcal" href="#" target="_blank" class="btn-gold">📅 Tambah ke Google Calendar</a>
-                </div>
-            </div>
-        </section>
+        <!-- 3. Couple Section -->
+        <section id="couple" class="py-24 bg-navy relative border-t border-gold/20">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h2 class="font-serif text-3xl md:text-4xl text-gold mb-12" data-aos="fade-up">Mempelai</h2>
 
-        <section id="story" class="snap-section content-section">
-            <div class="container">
-                <h2 class="section-title" data-aos="fade-up">Our Story</h2>
-                <div class="timeline" id="timeline-container">
+                <div class="flex flex-col md:flex-row items-center justify-center gap-12">
+                    <!-- Groom (Unsplash Image) -->
+                    <div class="couple-card flex-1" data-aos="fade-right">
+                        <div
+                            class="w-48 h-48 mx-auto rounded-full overflow-hidden border-4 border-gold shadow-[0_0_20px_rgba(212,175,55,0.3)] mb-6 relative">
+                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=800"
+                                class="w-full h-full object-cover" alt="Groom">
+                        </div>
+                        <h3 class="font-script text-4xl text-gold mb-2">Romeo Montague</h3>
+                        <p class="text-sm text-gray-400">Putra dari Bapak Fulan & Ibu Fulanah</p>
+                    </div>
+
+                    <div class="font-script text-6xl text-gold opacity-50" data-aos="zoom-in">&</div>
+
+                    <!-- Bride (Unsplash Image) -->
+                    <div class="couple-card flex-1" data-aos="fade-left">
+                        <div
+                            class="w-48 h-48 mx-auto rounded-full overflow-hidden border-4 border-gold shadow-[0_0_20px_rgba(212,175,55,0.3)] mb-6 relative">
+                            <img src="https://images.unsplash.com/photo-1532413992378-f169ac26fff0?auto=format&fit=crop&q=80&w=800"
+                                class="w-full h-full object-cover" alt="Bride">
+                        </div>
+                        <h3 class="font-script text-4xl text-gold mb-2">Juliet Capulet</h3>
+                        <p class="text-sm text-gray-400">Putri dari Bapak Fulan & Ibu Fulanah</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="gallery" class="snap-section content-section blue-bg">
-            <div class="container">
-                <h2 class="section-title gold-text" data-aos="fade-up">Galeri Foto</h2>
-                <div class="masonry" id="gallery-container">
+        <!-- 4. Love Story (Timeline) -->
+        <section id="story" class="py-24 bg-navy relative border-t border-gold/20">
+            <div class="max-w-3xl mx-auto px-4">
+                <h2 class="font-serif text-3xl md:text-4xl text-gold mb-12 text-center" data-aos="fade-up">Kisah Cinta
+                    Kami</h2>
+
+                <div class="relative border-l-2 border-gold/30 pl-6 md:pl-0 md:border-l-0">
+                    <!-- Garis tengah untuk desktop -->
+                    <div
+                        class="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gold/30 transform -translate-x-1/2">
+                    </div>
+
+                    <!-- Item 1 -->
+                    <div class="mb-10 md:flex md:justify-between md:items-center w-full" data-aos="fade-up">
+                        <div class="md:w-5/12 md:text-right pr-6">
+                            <h3 class="text-gold font-serif text-xl">Pertama Bertemu</h3>
+                            <p class="text-sm text-gray-400 mb-2">Januari 2024</p>
+                            <p class="text-gray-300 text-sm">Bertemu tanpa sengaja di sebuah kedai kopi di sudut kota,
+                                berawal dari perbincangan sederhana yang membekas di hati.</p>
+                        </div>
+                        <div class="absolute left-[-9px] md:static md:w-2/12 flex justify-center">
+                            <div class="w-4 h-4 bg-gold rounded-full shadow-[0_0_10px_#D4AF37]"></div>
+                        </div>
+                        <div class="md:w-5/12 hidden md:block"></div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="mb-10 md:flex md:justify-between md:items-center w-full" data-aos="fade-up">
+                        <div class="md:w-5/12 hidden md:block"></div>
+                        <div class="absolute left-[-9px] md:static md:w-2/12 flex justify-center">
+                            <div class="w-4 h-4 bg-gold rounded-full shadow-[0_0_10px_#D4AF37]"></div>
+                        </div>
+                        <div class="md:w-5/12 pl-0 md:pl-6 mt-4 md:mt-0">
+                            <h3 class="text-gold font-serif text-xl">Khitbah (Lamaran)</h3>
+                            <p class="text-sm text-gray-400 mb-2">Agustus 2025</p>
+                            <p class="text-gray-300 text-sm">Dengan niat yang tulus, keluarga besar bertemu untuk
+                                menyatukan visi dan mengikat janji suci ke jenjang yang lebih serius.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="rsvp" class="snap-section content-section">
-            <div class="container split-layout">
-                <div class="rsvp-form-container" data-aos="fade-right">
-                    <h2 class="section-title text-left">RSVP & Ucapan</h2>
-                    <form id="rsvp-form">
-                        <input type="text" id="guest-name" placeholder="Nama Anda" required>
-                        <select id="guest-attendance" required>
-                            <option value="">Konfirmasi Kehadiran</option>
-                            <option value="Hadir">Hadir</option>
-                            <option value="Tidak Hadir">Tidak Hadir</option>
-                        </select>
-                        <input type="number" id="guest-pax" placeholder="Jumlah Tamu (Pax)" min="1" max="5">
-                        <textarea id="guest-message" rows="4" placeholder="Berikan doa & ucapan..." required></textarea>
-                        <button type="submit" class="btn-gold">Kirim RSVP</button>
+        <!-- 5 & 6. Event Details & Countdown -->
+        <section id="events" class="py-24 relative">
+            <!-- Background Overlay -->
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=2070"
+                    class="w-full h-full object-cover opacity-10" alt="Venue">
+                <div class="absolute inset-0 bg-navy/80"></div>
+            </div>
+
+            <div class="max-w-5xl mx-auto px-4 relative z-10">
+                <h2 class="font-serif text-3xl md:text-4xl text-gold mb-12 text-center" data-aos="fade-up">Rangkaian
+                    Acara</h2>
+
+                <!-- Countdown Timer -->
+                <div class="flex justify-center gap-4 text-center mb-16" data-aos="zoom-in">
+                    <div class="glass-panel p-4 rounded-xl border border-gold/30 w-20 md:w-24">
+                        <div id="days" class="text-3xl md:text-5xl font-serif text-gold">00</div>
+                        <div class="text-xs text-gray-300 uppercase tracking-wider mt-1">Hari</div>
+                    </div>
+                    <div class="glass-panel p-4 rounded-xl border border-gold/30 w-20 md:w-24">
+                        <div id="hours" class="text-3xl md:text-5xl font-serif text-gold">00</div>
+                        <div class="text-xs text-gray-300 uppercase tracking-wider mt-1">Jam</div>
+                    </div>
+                    <div class="glass-panel p-4 rounded-xl border border-gold/30 w-20 md:w-24">
+                        <div id="minutes" class="text-3xl md:text-5xl font-serif text-gold">00</div>
+                        <div class="text-xs text-gray-300 uppercase tracking-wider mt-1">Menit</div>
+                    </div>
+                    <div class="glass-panel p-4 rounded-xl border border-gold/30 w-20 md:w-24">
+                        <div id="seconds" class="text-3xl md:text-5xl font-serif text-gold">00</div>
+                        <div class="text-xs text-gray-300 uppercase tracking-wider mt-1">Detik</div>
+                    </div>
+                </div>
+
+                <!-- Event Cards -->
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Akad -->
+                    <div class="glass-panel p-8 rounded-2xl border border-gold/30 text-center relative overflow-hidden"
+                        data-aos="fade-right">
+                        <div
+                            class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent">
+                        </div>
+                        <h3 class="font-script text-4xl text-gold mb-4">Akad Nikah</h3>
+                        <p class="font-serif text-xl text-white mb-2">Minggu, 12 Desember 2026</p>
+                        <p class="text-gray-300 mb-6">Pukul 08.00 - 10.00 WIB</p>
+                        <p class="text-sm text-gray-400 mb-1"><strong>Masjid Raya Bintaro</strong></p>
+                        <p class="text-sm text-gray-400 mb-6">Jl. Bintaro Utama, Tangerang Selatan</p>
+                        <a href="#" target="_blank"
+                            class="inline-block border border-gold text-gold px-6 py-2 rounded-full hover:bg-gold hover:text-navy transition-colors text-sm">Lihat
+                            Peta</a>
+                    </div>
+
+                    <!-- Resepsi -->
+                    <div class="glass-panel p-8 rounded-2xl border border-gold/30 text-center relative overflow-hidden"
+                        data-aos="fade-left">
+                        <div
+                            class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent">
+                        </div>
+                        <h3 class="font-script text-4xl text-gold mb-4">Resepsi</h3>
+                        <p class="font-serif text-xl text-white mb-2">Minggu, 12 Desember 2026</p>
+                        <p class="text-gray-300 mb-6">Pukul 11.00 - 14.00 WIB</p>
+                        <p class="text-sm text-gray-400 mb-1"><strong>Hotel Mulia Senayan</strong></p>
+                        <p class="text-sm text-gray-400 mb-6">Jl. Asia Afrika, Jakarta Pusat</p>
+                        <a href="#" target="_blank"
+                            class="inline-block border border-gold text-gold px-6 py-2 rounded-full hover:bg-gold hover:text-navy transition-colors text-sm">Lihat
+                            Peta</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. Gallery -->
+        <section id="gallery" class="py-24 bg-navy relative border-t border-gold/20">
+            <div class="max-w-5xl mx-auto px-4 text-center">
+                <h2 class="font-serif text-3xl md:text-4xl text-gold mb-12" data-aos="fade-up">Momen Bahagia</h2>
+
+                <!-- Swiper -->
+                <div class="swiper gallery-swiper" data-aos="zoom-in">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide rounded-xl overflow-hidden border-2 border-gold/20">
+                            <img src="https://images.unsplash.com/photo-1583939000148-774d8c79c885?auto=format&fit=crop&q=80&w=800"
+                                class="w-full h-80 object-cover" alt="Gallery 1">
+                        </div>
+                        <div class="swiper-slide rounded-xl overflow-hidden border-2 border-gold/20">
+                            <img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&q=80&w=800"
+                                class="w-full h-80 object-cover" alt="Gallery 2">
+                        </div>
+                        <div class="swiper-slide rounded-xl overflow-hidden border-2 border-gold/20">
+                            <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=800"
+                                class="w-full h-80 object-cover" alt="Gallery 3">
+                        </div>
+                        <div class="swiper-slide rounded-xl overflow-hidden border-2 border-gold/20">
+                            <img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80&w=800"
+                                class="w-full h-80 object-cover" alt="Gallery 4">
+                        </div>
+                    </div>
+                    <!-- Pagination -->
+                    <div class="swiper-pagination !bottom-0 !relative mt-6"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. RSVP & Wishes -->
+        <section id="rsvp" class="py-24 relative">
+            <div class="max-w-3xl mx-auto px-4">
+                <div class="glass-panel p-8 md:p-12 rounded-3xl border border-gold/30 shadow-[0_0_30px_rgba(212,175,55,0.1)]"
+                    data-aos="fade-up">
+                    <h2 class="font-serif text-3xl md:text-4xl text-gold mb-2 text-center">RSVP & Ucapan</h2>
+                    <p class="text-center text-gray-400 mb-8 text-sm">Kehadiran dan doa restu Anda adalah kado terindah
+                        bagi kami.</p>
+
+                    <form id="rsvp-form" class="space-y-4 mb-10">
+                        <div>
+                            <input type="text" id="rsvp-name" placeholder="Nama Anda" required
+                                class="w-full bg-navy/50 border border-gold/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gold transition-colors">
+                        </div>
+                        <div>
+                            <textarea id="rsvp-message" rows="4" placeholder="Tulis ucapan & doa..." required
+                                class="w-full bg-navy/50 border border-gold/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gold transition-colors"></textarea>
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-gold text-navy font-bold py-3 rounded-lg hover:bg-yellow-500 transition-colors">Kirim
+                            Ucapan</button>
                     </form>
-                </div>
-                <div class="wishes-container" data-aos="fade-left">
-                    <div class="wishes-list" id="wishes-list">
+
+                    <!-- List Ucapan -->
+                    <div class="max-h-60 overflow-y-auto pr-2 custom-scrollbar space-y-4" id="wishes-container">
+                        <!-- Data dari JS akan muncul di sini -->
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="footer-section" class="snap-section content-section blue-bg text-center">
-            <div class="container">
-                <h2 class="section-title gold-text" data-aos="fade-down">Wedding Gift</h2>
-                <p data-aos="fade-up">Bagi keluarga dan sahabat yang ingin memberikan tanda kasih, dapat melalui
-                    rekening berikut:</p>
-                <div class="gift-cards" id="gift-container">
-                </div>
+        <!-- 9. Wedding Gift -->
+        <section id="gift" class="py-24 bg-navy border-t border-gold/20 text-center">
+            <div class="max-w-2xl mx-auto px-4" data-aos="zoom-in">
+                <h2 class="font-serif text-3xl md:text-4xl text-gold mb-6">Wedding Gift</h2>
+                <p class="text-gray-400 mb-8 text-sm md:text-base">Bagi bapak/ibu/saudara/i yang ingin memberikan tanda
+                    kasih, dapat melalui nomor rekening di bawah ini:</p>
 
-                <h2 class="section-title gold-text mt-5" data-aos="fade-down">Lokasi Acara</h2>
-                <div class="map-container" data-aos="zoom-in">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.348651817478!2d112.71261331532822!3d-7.33967899470295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fb40b3793e5f%3A0x67a3a9cf3b1b4c4d!2sMasjid%20Nasional%20Al-Akbar%20Surabaya!5e0!3m2!1sid!2sid!4v1640000000000!5m2!1sid!2sid"
-                        width="100%" height="300" style="border:0; border-radius:10px;" allowfullscreen=""
-                        loading="lazy"></iframe>
+                <div
+                    class="glass-panel p-6 md:p-8 rounded-2xl border border-gold/30 inline-block text-left w-full md:w-auto">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="w-12 h-12 bg-white rounded flex items-center justify-center font-bold text-blue-800">
+                            BCA</div>
+                        <div>
+                            <p class="text-gold font-bold text-xl tracking-wider" id="rek-bca">1234 5678 90</p>
+                            <p class="text-sm text-gray-300">a.n Romeo Montague</p>
+                        </div>
+                    </div>
+                    <button onclick="navigator.clipboard.writeText('1234567890')"
+                        class="w-full border border-gold text-gold py-2 rounded hover:bg-gold hover:text-navy transition-colors text-sm flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Salin No. Rekening
+                    </button>
                 </div>
-
-                <footer class="mt-5" data-aos="fade-up">
-                    <p>Merupakan suatu kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir.</p>
-                    <h3 class="names-title mt-2">Putri & Andika</h3>
-                    <p class="small-text">#AndikaJemputPutri</p>
-                </footer>
             </div>
         </section>
+
+        <!-- 10. Footer -->
+        <footer class="py-12 bg-[#060e1a] text-center border-t border-gold/10 relative overflow-hidden">
+            <!-- SVG Floral Decor Bottom -->
+            <div class="absolute bottom-[-20px] left-1/2 transform -translate-x-1/2 text-gold opacity-10 w-64">
+                <svg viewBox="0 0 100 100" fill="currentColor">
+                    <path d="M50,0 C60,40 90,50 100,50 C90,50 60,60 50,100 C40,60 10,50 0,50 C10,50 40,40 50,0 Z" />
+                </svg>
+            </div>
+            <div class="relative z-10">
+                <p class="text-gray-400 mb-2 text-sm">Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila
+                    Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu.</p>
+                <p class="text-gray-500 mb-6 text-sm">Wassalamu'alaikum Warahmatullahi Wabarakatuh</p>
+                <h2 class="font-script text-5xl text-gold mb-2">Romeo & Juliet</h2>
+                <p class="text-xs text-gray-600">Created with ❤️ by <a href="https://marcellkurniawan.github.io/"
+                        target="_blank">Marcellino Putra Kurniawan</a></p>
+            </div>
+        </footer>
     </main>
 
-    <div id="lightbox" class="lightbox">
-        <span class="lightbox-close">&times;</span>
-        <img class="lightbox-content" id="lightbox-img">
-    </div>
-
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="public/assets/js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+    <script type="module" src="assets/js/main.js"></script>
 </body>
 
 </html>
