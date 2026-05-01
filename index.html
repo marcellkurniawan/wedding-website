@@ -87,6 +87,58 @@
         .animate-floatY {
             animation: floatY 6s ease-in-out infinite;
         }
+
+        /* Custom Scrollbar untuk Kolom Ucapan */
+        .wishes-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .wishes-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .wishes-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.5);
+            border-radius: 4px;
+        }
+
+        .wishes-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 175, 55, 0.8);
+        }
+
+        /* Animasi Ucapan Masuk dari Kiri & Kanan */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-slide-left {
+            animation: slideInLeft 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .animate-slide-right {
+            animation: slideInRight 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
     </style>
 </head>
 
@@ -637,28 +689,55 @@
 
         <!-- 6. RSVP & Footer -->
         <section id="rsvp-footer" class="bg-navy pt-24 pb-12 text-white border-t border-gold/20 overflow-hidden">
-            <div class="max-w-3xl mx-auto px-4 relative z-10">
+            <div class="max-w-4xl mx-auto px-4 relative z-10">
                 <div class="text-center mb-12" data-aos="fade-up">
                     <h2 class="font-script text-5xl text-gold mb-4">Ucapan</h2>
                     <p class="text-gray-400 text-sm">Kehadiran dan doa restu Anda adalah kado terindah bagi kami.</p>
                 </div>
 
-                <form id="rsvp-form" class="space-y-6 mb-16" data-aos="fade-up">
-                    <input type="text" id="rsvp-name" placeholder="Nama Anda" required
-                        class="w-full bg-transparent border-b border-gold/50 px-0 py-3 text-white focus:outline-none focus:border-gold placeholder-gray-500 rounded-none">
-                    <select id="rsvp-attendance"
-                        class="w-full bg-transparent border-b border-gold/50 px-0 py-3 text-white focus:outline-none focus:border-gold [&>option]:text-navy rounded-none appearance-none">
-                        <option value="Hadir">Akan Hadir</option>
-                        <option value="Tidak Hadir">Maaf, Tidak Bisa Hadir</option>
-                    </select>
-                    <textarea id="rsvp-message" rows="3" placeholder="Tulis doa & ucapan..." required
-                        class="w-full bg-transparent border-b border-gold/50 px-0 py-3 text-white focus:outline-none focus:border-gold placeholder-gray-500 rounded-none"></textarea>
+                <!-- Form dengan ID BARU agar tidak tabrakan dengan main.js -->
+                <form id="new-rsvp-form" class="max-w-2xl mx-auto space-y-6 mb-16" data-aos="fade-up">
+                    <input type="text" id="new-rsvp-name" placeholder="Nama Anda" required
+                        class="w-full bg-transparent border-b border-gold/50 px-0 py-3 text-white focus:outline-none focus:border-gold placeholder-gray-500 rounded-none transition-colors">
+
+                    <!-- Custom Dropdown Wrapper -->
+                    <div class="relative" id="custom-select-wrapper">
+                        <input type="hidden" id="new-rsvp-attendance" required>
+
+                        <!-- Trigger Button -->
+                        <div id="custom-select-btn"
+                            class="w-full bg-transparent border-b border-gold/50 px-0 py-3 focus:outline-none cursor-pointer flex justify-between items-center text-gray-500 hover:border-gold transition-colors">
+                            <span id="custom-select-text">Konfirmasi Kehadiran</span>
+                            <svg class="w-5 h-5 transition-transform duration-300" id="custom-select-icon" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+
+                        <!-- Dropdown Options -->
+                        <div id="custom-select-dropdown"
+                            class="absolute w-full bg-[#081321] border border-gold/40 mt-2 shadow-2xl z-50 hidden opacity-0 transition-opacity duration-300">
+                            <div class="px-5 py-4 hover:bg-gold/10 text-white cursor-pointer transition-colors border-b border-gold/10 font-sans tracking-wide"
+                                data-value="Hadir">Akan Hadir</div>
+                            <div class="px-5 py-4 hover:bg-gold/10 text-white cursor-pointer transition-colors font-sans tracking-wide"
+                                data-value="Tidak Hadir">Maaf, Tidak Bisa Hadir</div>
+                        </div>
+                    </div>
+
+                    <textarea id="new-rsvp-message" rows="3" placeholder="Tulis doa & ucapan..." required
+                        class="w-full bg-transparent border-b border-gold/50 px-0 py-3 text-white focus:outline-none focus:border-gold placeholder-gray-500 rounded-none transition-colors"></textarea>
+
                     <button type="submit"
-                        class="w-full border border-gold text-gold font-sans tracking-widest text-sm py-4 hover:bg-gold hover:text-navy transition-colors uppercase">Kirim
+                        class="w-full border border-gold text-gold font-sans tracking-widest text-sm py-4 hover:bg-gold hover:text-navy transition-colors uppercase mt-4">Kirim
                         Ucapan</button>
                 </form>
 
-                <div class="max-h-60 overflow-y-auto pr-2 space-y-4 mb-20" id="wishes-container"></div>
+                <!-- Grid 2 Kolom untuk Menampilkan Ucapan -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto overflow-x-hidden pr-2 mb-20 wishes-scrollbar"
+                    id="new-wishes-container">
+                    <!-- Data ucapan akan dirender oleh Javascript di sini -->
+                </div>
 
                 <div class="text-center border-t border-white/10 pt-12">
                     <h2 class="font-script text-6xl text-gold mb-2">Romeo & Juliet</h2>
@@ -673,17 +752,20 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <!-- Script Eksternal -->
     <script type="module" src="assets/js/main.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <script>
-        // Fungsi Lightbox Gallery
+        // ----------------------------------------------------
+        // 1. FUNGSI LIGHTBOX GALLERY
+        // ----------------------------------------------------
         const lightboxModal = document.getElementById('lightbox-modal');
         const lightboxImg = document.getElementById('lightbox-img');
 
         window.openLightbox = function (imgSrc) {
             lightboxImg.src = imgSrc;
             lightboxModal.classList.remove('hidden');
-            // Sedikit delay agar animasi transition Tailwind berjalan smooth
             setTimeout(() => {
                 lightboxModal.classList.remove('opacity-0');
                 lightboxImg.classList.remove('scale-95');
@@ -695,14 +777,140 @@
             lightboxModal.classList.add('opacity-0');
             lightboxImg.classList.remove('scale-100');
             lightboxImg.classList.add('scale-95');
-            // Menunggu transisi selesai sebelum di hide
             setTimeout(() => {
                 lightboxModal.classList.add('hidden');
                 lightboxImg.src = '';
             }, 300);
         }
-    </script>
 
+        // ----------------------------------------------------
+        // 2. LOGIKA CUSTOM SELECT (Dropdown Premium)
+        // ----------------------------------------------------
+        const selectBtn = document.getElementById('custom-select-btn');
+        const selectDropdown = document.getElementById('custom-select-dropdown');
+        const selectText = document.getElementById('custom-select-text');
+        const selectIcon = document.getElementById('custom-select-icon');
+        const attendanceInput = document.getElementById('new-rsvp-attendance');
+
+        // Buka tutup Dropdown
+        selectBtn.addEventListener('click', () => {
+            // Hapus teks peringatan merah jika ada
+            if (selectText.classList.contains('text-red-400')) {
+                selectText.innerText = "Konfirmasi Kehadiran";
+                selectText.classList.replace('text-red-400', 'text-gray-500');
+                selectBtn.classList.replace('border-red-400', 'border-gold/50');
+            }
+
+            selectDropdown.classList.toggle('hidden');
+            setTimeout(() => {
+                selectDropdown.classList.toggle('opacity-0');
+                selectIcon.classList.toggle('rotate-180');
+            }, 10);
+        });
+
+        // Pilih Opsi Dropdown
+        document.querySelectorAll('#custom-select-dropdown div').forEach(option => {
+            option.addEventListener('click', (e) => {
+                const value = e.target.getAttribute('data-value');
+                selectText.innerText = e.target.innerText;
+                selectText.classList.remove('text-gray-500', 'text-red-400');
+                selectText.classList.add('text-white');
+                attendanceInput.value = value;
+
+                // Tutup Dropdown
+                selectDropdown.classList.add('opacity-0');
+                selectIcon.classList.remove('rotate-180');
+                setTimeout(() => selectDropdown.classList.add('hidden'), 300);
+            });
+        });
+
+        // Klik di luar menutup dropdown
+        document.addEventListener('click', (e) => {
+            if (!document.getElementById('custom-select-wrapper').contains(e.target)) {
+                selectDropdown.classList.add('opacity-0');
+                selectIcon.classList.remove('rotate-180');
+                setTimeout(() => selectDropdown.classList.add('hidden'), 300);
+            }
+        });
+
+        // ----------------------------------------------------
+        // 3. LOGIKA LOCAL STORAGE & RENDER UCAPAN (Tanpa Alert)
+        // ----------------------------------------------------
+        const rsvpForm = document.getElementById('new-rsvp-form');
+        const wishesContainer = document.getElementById('new-wishes-container');
+
+        const defaultWishes = [
+            { name: "Keluarga Montague", attendance: "Hadir", message: "Selamat menempuh hidup baru Romeo & Juliet! Semoga langgeng selamanya.", date: "10 Des 2026" },
+            { name: "Sahabat Juliet", attendance: "Tidak Hadir", message: "Maaf belum bisa hadir, doa terbaik untuk kalian berdua ya ❤️", date: "11 Des 2026" }
+        ];
+
+        // Pakai key 'wedding_wishes_v2' agar mereset data error sebelumnya
+        let wishes = [];
+        try {
+            const saved = JSON.parse(localStorage.getItem('wedding_wishes_v2'));
+            wishes = Array.isArray(saved) ? saved : defaultWishes;
+        } catch (e) {
+            wishes = defaultWishes;
+        }
+
+        function renderWishes() {
+            wishesContainer.innerHTML = '';
+            wishes.forEach((wish, index) => {
+                if (!wish || !wish.name) return; // Keamanan agar kotak kosong tidak dirender
+
+                const animClass = index % 2 === 0 ? 'animate-slide-left' : 'animate-slide-right';
+                const badgeColor = wish.attendance === 'Hadir' ? 'border-gold text-gold' : 'border-gray-500 text-gray-500';
+
+                const card = `
+                    <div class="bg-[#081321]/80 border border-gold/20 p-6 rounded-sm opacity-0 ${animClass} backdrop-blur-sm" style="animation-delay: ${Math.min(index * 0.1, 0.5)}s; animation-fill-mode: forwards;">
+                        <div class="flex justify-between items-start mb-4 gap-4">
+                            <h4 class="font-serif text-xl text-gold break-words flex-1">${wish.name}</h4>
+                            <span class="font-sans text-[9px] uppercase tracking-widest px-2 py-1 border ${badgeColor} whitespace-nowrap">${wish.attendance}</span>
+                        </div>
+                        <p class="font-sans text-sm text-gray-300 leading-relaxed italic mb-4 break-words">"${wish.message}"</p>
+                        <p class="text-xs text-gray-500 font-sans uppercase tracking-widest">${wish.date}</p>
+                    </div>
+                `;
+                wishesContainer.innerHTML += card;
+            });
+        }
+
+        // Ketika dikirim
+        rsvpForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('new-rsvp-name').value.trim();
+            const attendance = attendanceInput.value;
+            const message = document.getElementById('new-rsvp-message').value.trim();
+
+            // Peringatan Merah (Tanpa Alert)
+            if (!attendance) {
+                selectText.innerText = "Mohon Pilih Kehadiran Anda!";
+                selectText.classList.remove('text-white', 'text-gray-500');
+                selectText.classList.add('text-red-400');
+                selectBtn.classList.replace('border-gold/50', 'border-red-400');
+                return;
+            }
+
+            const today = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+            const newWish = { name, attendance, message, date: today };
+
+            // Simpan
+            wishes.unshift(newWish);
+            localStorage.setItem('wedding_wishes_v2', JSON.stringify(wishes));
+
+            // Bersihkan form
+            rsvpForm.reset();
+            selectText.innerText = "Konfirmasi Kehadiran";
+            selectText.classList.remove('text-white', 'text-red-400');
+            selectText.classList.add('text-gray-500');
+            attendanceInput.value = '';
+
+            renderWishes();
+        });
+
+        // Jalankan Pertama Kali
+        renderWishes();
+    </script>
 </body>
 
 </html>
