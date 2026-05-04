@@ -1,32 +1,44 @@
 {
   "couple": {
     "groom": {
-      "name": "Romeo Montague",
+      "nickname": "Romeo",
+      "fullname": "Romeo Montague",
       "father": "Bapak Fulan",
-      "mother": "Ibu Fulanah",
-      "instagram": "@romeo"
+      "mother": "Ibu Fulanah"
     },
     "bride": {
-      "name": "Juliet Capulet",
+      "nickname": "Juliet",
+      "fullname": "Juliet Capulet",
       "father": "Bapak Fulan",
-      "mother": "Ibu Fulanah",
-      "instagram": "@juliet"
+      "mother": "Ibu Fulanah"
     }
   },
   "event": {
+    "date_string": "12 . 12 . 2026",
     "akad": {
-      "date": "2026-12-12T08:00:00",
+      "date_display": "Minggu, 12 Des 2026",
       "time_string": "08.00 - 10.00 WIB",
       "location": "Masjid Raya Bintaro",
       "address": "Jl. Bintaro Utama, Tangerang Selatan",
-      "map_link": "https://maps.google.com/..."
+      "map_link": "https://maps.google.com/"
     },
     "reception": {
-      "date": "2026-12-12T11:00:00",
+      "date_display": "Minggu, 12 Des 2026",
       "time_string": "11.00 - 14.00 WIB",
       "location": "Hotel Mulia Senayan",
       "address": "Jl. Asia Afrika, Jakarta Pusat",
-      "map_link": "https://maps.google.com/..."
+      "map_link": "https://maps.google.com/"
     }
-  }
+  },
+  "gallery": [
+    "assets/images/moments/moments1.jpg",
+    "assets/images/moments/moments2.jpg",
+    "assets/images/moments/moments3.jpg",
+    "assets/images/moments/moments4.jpg",
+    "assets/images/moments/moments5.jpg",
+    "assets/images/moments/moments9.jpg",
+    "assets/images/moments/moments6.jpg",
+    "assets/images/moments/moments7.jpg",
+    "assets/images/moments/moments8.jpg"
+  ]
 }
